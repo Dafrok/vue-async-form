@@ -9,14 +9,10 @@ export default {
   methods: {
     _serilize ($form) {
       const formData = new FormData()
-      const data = {}
       for (let i = 0; i < $form.length; i++) {
-        if (data[name]) {
-          data[name].push($form[i].value)
-        } else {
-          data[name] = [$form[i].value]
-        }
+        formData.append(name, $form[i].value)
       }
+      return formData
     }
     submit (e) {
       const {action,  acceptCharset, autoComplete, enctype, method, name, novalidate, target} = this
