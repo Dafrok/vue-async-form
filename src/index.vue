@@ -17,9 +17,9 @@ export default {
     submit (e) {
       const {action,  acceptCharset, autoComplete, enctype, method, name, novalidate, target} = this
       const formData = this._serilize(e.target)
-
       const options = {
         headers: {
+          "Content-Type": enctype || "application/x-www-form-urlencoded"
         },
         methods: method,
         body: formData
