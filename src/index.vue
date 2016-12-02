@@ -21,6 +21,8 @@ export default {
         headers: {
           "Content-Type": enctype || "application/x-www-form-urlencoded"
         },
+        mode: "no-cors",
+        credentials: 'include',
         methods: method,
         body: formData
       }
