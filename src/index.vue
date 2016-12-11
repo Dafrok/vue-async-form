@@ -8,12 +8,19 @@ export default {
   props: ['accept-charset', 'action', 'autocomplete', 'enctype', 'method', 'name', 'novaidate', 'target'],
   methods: {
     _serilize ($form) {
-      const formData = new FormData()
-      for (let i = 0; i < $form.length; i++) {
-        formData.append(name, $form[i].value)
+      return {
+        multipart () {
+          return new FormData($form)
+        },
+        urlEncoded () {
+          let ret = ''
+          for (let i = 0; i < $form.length; i++) {
+            ret += `${encodeURIComponent(name)}=${encodeURIComponent($form[i].value)}${i === $form.length - 1 ? '' : '&'}`
+          }
+          return ret
+        }
       }
-      return formData
-    }
+    },
     submit (e) {
       const {action,  acceptCharset, autoComplete, enctype, method, name, novalidate, target} = this
       const formData = this._serilize(e.target)
