@@ -23,19 +23,29 @@ export default {
     },
     submit (e) {
       const {action,  acceptCharset, autoComplete, enctype, method, name, novalidate, target} = this
-      const formData = this._serilize(e.target)
+      let fetchUrl = action
+      const serilizer = this._serilize(e.target)
       const options = {
         headers: {
           "Content-Type": enctype || "application/x-www-form-urlencoded"
         },
         mode: "no-cors",
         credentials: 'include',
-        methods: method,
-        body: formData
+        methods: method
+      }
+      switch (method.toUpperCase()) {
+        case 'GET':
+          fetchUrl = serilizer.urlEncoded()
+        default:
+          if (options.headers["Content-Type"] === "application/x-www-form-urlencoded") {
+            options.body = serilizer.urlEncoded()
+          } else {
+            options.body = serilizer.multipart()
+          }
       }
       fetch(action, options)
         .then(res => this.$emit('response'))
-        .catch(res => this.$emit('failed'))
+        .catch(res => this.$emit('disconnect'))
     }
   }
 }
