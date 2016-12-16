@@ -7,15 +7,25 @@ form(@submit.prevent="submit")
 export default {
   props: ['accept-charset', 'action', 'autocomplete', 'enctype', 'method', 'name', 'novaidate', 'target'],
   methods: {
-    _serilize ($form) {
+    _getGlobalFormItems (name) {
+      return document.querySelectorAll(`[form=${name}]:not(form[name=${name}] *)`)
+    },
+    _serilize ($form, globalFormItems) {
       return {
         multipart () {
-          return new FormData($form)
+          const formData = new FormData($form)
+          for (let i = 0; i < globalFormItems.length; i++) {
+            formData.append(globalFormItems[i].name, globalFormItems[i].value)
+          }
+          return formData
         },
         urlEncoded () {
           let ret = ''
           for (let i = 0; i < $form.length; i++) {
-            ret += `${encodeURIComponent(name)}=${encodeURIComponent($form[i].value)}${i === $form.length - 1 ? '' : '&'}`
+            ret += `${encodeURIComponent($form[i].name)}=${encodeURIComponent($form[i].value)}`
+          }
+          for (let i = 0; i < globalFormItems.length; i++) {
+            ret += `${encodeURIComponent(globalFormItems[i].name)}=${encodeURIComponent(globalFormItems[i].value)}`
           }
           return ret
         }
@@ -24,7 +34,7 @@ export default {
     submit (e) {
       const {action,  acceptCharset, autoComplete, enctype, method, name, novalidate, target} = this
       let fetchUrl = action
-      const serilizer = this._serilize(e.target)
+      const serilizer = this._serilize(e.target, this._getGlobalFormItems(name))
       const options = {
         headers: {
           "Content-Type": enctype || "application/x-www-form-urlencoded"
@@ -43,7 +53,7 @@ export default {
             options.body = serilizer.multipart()
           }
       }
-      fetch(action, options)
+      fetch(fetchUrl, options)
         .then(res => this.$emit('response'))
         .catch(res => this.$emit('disconnect'))
     }
