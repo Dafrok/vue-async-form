@@ -47,7 +47,7 @@ export default {
         case 'GET':
           fetchUrl = serilizer.urlEncoded()
         default:
-          if (options.headers["Content-Type"] === "application/x-www-form-urlencoded") {
+          if (options.headers["Content-Type"] === `application/x-www-form-urlencoded${acceptCharset ? ';' + acceptCharset : ''}`) {
             options.body = serilizer.urlEncoded()
           } else {
             options.body = serilizer.multipart()
