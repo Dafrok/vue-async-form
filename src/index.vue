@@ -35,9 +35,10 @@ export default {
       const {action,  acceptCharset, autoComplete, enctype, method, name, novalidate, target} = this
       let fetchUrl = action
       const serilizer = this._serilize(e.target, this._getGlobalFormItems(name))
+      const defaultEnctype = `application/x-www-form-urlencoded${acceptCharset ? ';' + acceptCharset : ''}`
       const options = {
         headers: {
-          "Content-Type": enctype || "application/x-www-form-urlencoded"
+          "Content-Type": enctype || defaultEnctype
         },
         mode: "no-cors",
         credentials: 'include',
@@ -47,7 +48,7 @@ export default {
         case 'GET':
           fetchUrl = serilizer.urlEncoded()
         default:
-          if (options.headers["Content-Type"] === `application/x-www-form-urlencoded${acceptCharset ? ';' + acceptCharset : ''}`) {
+          if (options.headers["Content-Type"] === defaultEnctype) {
             options.body = serilizer.urlEncoded()
           } else {
             options.body = serilizer.multipart()
