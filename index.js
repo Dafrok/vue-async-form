@@ -132,7 +132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	    },
 	    submit(e) {
-	      const { action, acceptCharset, autoComplete, enctype, method, name, novalidate, target } = this;
+	      const { action, acceptCharset, /*autoComplete,*/enctype, method, name, novalidate, target } = this;
 	      let fetchUrl = action;
 	      const serilizer = this._serilize(e.target, this._getGlobalFormItems(name));
 	      const defaultEnctype = `application/x-www-form-urlencoded${ acceptCharset ? ';' + acceptCharset : '' }`;
@@ -154,7 +154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            options.body = serilizer.multipart();
 	          }
 	      }
-	      fetch(fetchUrl, options).then(res => this.$emit('response')).catch(res => this.$emit('disconnect'));
+	      fetch(fetchUrl, options).then(res => this.$emit('response', res)).catch(res => this.$emit('disconnect', res));
 	    }
 	  }
 	};

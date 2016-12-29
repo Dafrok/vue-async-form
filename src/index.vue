@@ -32,7 +32,7 @@ export default {
       }
     },
     submit (e) {
-      const {action,  acceptCharset, autoComplete, enctype, method, name, novalidate, target} = this
+      const {action, acceptCharset, /*autoComplete,*/ enctype, method, name, novalidate, target} = this
       let fetchUrl = action
       const serilizer = this._serilize(e.target, this._getGlobalFormItems(name))
       const defaultEnctype = `application/x-www-form-urlencoded${acceptCharset ? ';' + acceptCharset : ''}`
@@ -55,8 +55,8 @@ export default {
           }
       }
       fetch(fetchUrl, options)
-        .then(res => this.$emit('response'))
-        .catch(res => this.$emit('disconnect'))
+        .then(res => this.$emit('response', res))
+        .catch(res => this.$emit('disconnect', res))
     }
   }
 }
