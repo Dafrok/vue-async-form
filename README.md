@@ -33,3 +33,8 @@ export default {
 }
 </script>
 ```
+
+## Events
+
+- response
+- disconnect
